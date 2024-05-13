@@ -1,6 +1,9 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashSet;
+import java.util.Scanner;
 
-public class FileAnalizer {
+public class FileAnalizer implements Runnable {
     private String name ;
     private  int wordCounter ;
     private  HashSet<String> word ;
@@ -43,7 +46,37 @@ public class FileAnalizer {
         return letterCounter / wordCounter ;
     }
 
+    @Override
+    public void run() {
+        File file = new File(name);
+        synchronized (this) {
+
+            try (Scanner scanner = new Scanner(file)) {
+                while (scanner.hasNextLine()) {
+                    String wordd = scanner.nextLine();
+                    wordCounter++;
+
+                    if (maxWord == null || wordd.length() > maxWord.length()) {
+                        maxWord = wordd;
+                    }
+
+                    if (minWord == null || wordd.length() < minWord.length()) {
+                        minWord = wordd;
+                    }
+
+                    word.add(wordd);
+                    letterCounter += wordd.length();
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     public int numWord(){
         return word.size();
     }
+
 }
