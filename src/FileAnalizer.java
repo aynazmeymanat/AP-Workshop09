@@ -38,4 +38,12 @@ public class FileAnalizer {
     public void setLetterCounter(int letterCounter) {
         this.letterCounter = letterCounter;
     }
+
+    public double average(){
+        return letterCounter / wordCounter ;
+    }
+
+    public int numWord(){
+        return word.size();
+    }
 }
